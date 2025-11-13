@@ -1,0 +1,21 @@
+package com.chicken.galaxy.audio
+
+interface AudioController {
+    fun playMenuMusic()
+    fun playGameMusic()
+    fun stopMusic()
+    fun pauseMusic()
+    fun resumeMusic()
+
+    fun setMusicVolume(percent: Int)
+    fun setSoundVolume(percent: Int)
+
+    fun playMagnetPurchase()
+    fun playNotEnoughMoney()
+
+    fun playShot()
+    fun playExplosion()
+    fun playCollect()
+    fun playGetHit()
+    fun playWin()
+}
