@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import com.chicken.galaxy.R
+import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
 import java.util.Locale
 
@@ -134,13 +135,22 @@ fun ScoreBadge(
 }
 
 fun formatScoreFixed(value: Int): String {
-    val symbols = DecimalFormatSymbols(Locale.getDefault()).apply {
-        groupingSeparator = '.'
-        decimalSeparator = ','
+    if (value < 10_000_000) {
+        val symbols = DecimalFormatSymbols(Locale.getDefault()).apply {
+            groupingSeparator = '.'
+            decimalSeparator = ','
+        }
+        val formatter = DecimalFormat("#,###", symbols)
+        return formatter.format(value.coerceAtLeast(0))
     }
-    val formatter = java.text.DecimalFormat("#,###", symbols)
-    return formatter.format(value.coerceAtLeast(0))
+
+    // 2️⃣ Если >= 10M → сокращаем до M
+    return when {
+        value < 1_000_000_000 -> "${value / 1_000_000}M"
+        else -> String.format(Locale.getDefault(), "%.1fB", value / 1_000_000_000f)
+    }
 }
+
 
 // ----------------------- Глянец -----------------------
 private fun Modifier.drawGloss(shape: RoundedCornerShape) = this

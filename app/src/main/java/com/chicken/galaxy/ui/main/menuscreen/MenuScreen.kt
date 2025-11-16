@@ -7,10 +7,14 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.displayCutout
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Tune
 import androidx.compose.material3.Icon
@@ -91,7 +95,8 @@ private fun MenuContent(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(horizontal = 24.dp, vertical = 32.dp),
+                    .windowInsetsPadding(WindowInsets.displayCutout)
+                    .padding(horizontal = 24.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.SpaceBetween
             ) {
@@ -128,24 +133,41 @@ private fun MenuContent(
     }
 }
 
+
 @Composable
-private fun TopBar(points: Int, onOpenSettings: () -> Unit) {
+private fun TopBar(
+    points: Int,
+    onOpenSettings: () -> Unit
+) {
     Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 8.dp, vertical = 4.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        SecondaryIconButton(onClick = onOpenSettings) {
-            Icon(
-                imageVector = Icons.Filled.Tune,
-                contentDescription = "Settings",
-                tint = Color.White,
-                modifier = Modifier.fillMaxSize(0.85f)
-            )
+        Box(
+            modifier = Modifier.wrapContentSize()
+        ) {
+            SecondaryIconButton(onClick = onOpenSettings) {
+                Icon(
+                    imageVector = Icons.Filled.Tune,
+                    contentDescription = "Settings",
+                    tint = Color.White,
+                    modifier = Modifier.fillMaxSize(0.85f)
+                )
+            }
         }
-        ScoreBadge(points)
+
+        Spacer(modifier = Modifier.weight(1f))
+
+        Box(
+            modifier = Modifier.padding(start = 20.dp).wrapContentSize()
+        ) {
+            ScoreBadge(points)
+        }
     }
 }
+
 
 @Composable
 private fun GameTitle() {

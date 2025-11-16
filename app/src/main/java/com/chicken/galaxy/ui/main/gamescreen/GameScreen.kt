@@ -12,6 +12,8 @@ import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.displayCutout
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -20,9 +22,12 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Pause
+import androidx.compose.material.icons.filled.Tune
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -135,7 +140,8 @@ fun GameScreen(
             onPause = viewModel::pause,
             modifier = Modifier
                 .align(Alignment.TopStart)
-                .padding(horizontal = 20.dp, vertical = 24.dp)
+                .windowInsetsPadding(WindowInsets.displayCutout)
+                .padding(horizontal = 20.dp)
         )
 
         if (state.phase.isIntro) {
@@ -231,7 +237,16 @@ private fun GameField(
             PlayerShip(
                 modifier = Modifier
                     .size(playerSize)
-                    .offset { toOffset(state.playerX, state.playerY, state.playerSize, widthPx, heightPx, basePx) }
+                    .offset {
+                        toOffset(
+                            state.playerX,
+                            state.playerY,
+                            state.playerSize,
+                            widthPx,
+                            heightPx,
+                            basePx
+                        )
+                    }
             )
 
             state.bullets.forEach { bullet ->
@@ -241,7 +256,16 @@ private fun GameField(
                             width = toDp(bullet.size * 1.5f, basePx, density),
                             height = toDp(bullet.size * 2f, basePx, density)
                         )
-                        .offset { toOffset(bullet.x, bullet.y, bullet.size, widthPx, heightPx, basePx) },
+                        .offset {
+                            toOffset(
+                                bullet.x,
+                                bullet.y,
+                                bullet.size,
+                                widthPx,
+                                heightPx,
+                                basePx
+                            )
+                        },
                     resId = R.drawable.our_shot,
                     rotation = 90f
                 )
@@ -254,9 +278,18 @@ private fun GameField(
                             width = toDp(bullet.size * 1.5f, basePx, density),
                             height = toDp(bullet.size * 2f, basePx, density)
                         )
-                        .offset { toOffset(bullet.x, bullet.y, bullet.size, widthPx, heightPx, basePx) },
+                        .offset {
+                            toOffset(
+                                bullet.x,
+                                bullet.y,
+                                bullet.size,
+                                widthPx,
+                                heightPx,
+                                basePx
+                            )
+                        },
                     resId = R.drawable.enemy_shot,
-                    rotation =  270f
+                    rotation = 270f
                 )
             }
 
@@ -272,7 +305,16 @@ private fun GameField(
                 EnemyShip(
                     modifier = Modifier
                         .size(toDp(enemy.size * 1.6f, basePx, density))
-                        .offset { toOffset(enemy.x, enemy.y, enemy.size, widthPx, heightPx, basePx) }
+                        .offset {
+                            toOffset(
+                                enemy.x,
+                                enemy.y,
+                                enemy.size,
+                                widthPx,
+                                heightPx,
+                                basePx
+                            )
+                        }
                 )
             }
 
@@ -281,7 +323,16 @@ private fun GameField(
                 ExplosionEffect(
                     modifier = Modifier
                         .size(toDp(spriteSize, basePx, density))
-                        .offset { toOffset(explosion.x, explosion.y, spriteSize, widthPx, heightPx, basePx) },
+                        .offset {
+                            toOffset(
+                                explosion.x,
+                                explosion.y,
+                                spriteSize,
+                                widthPx,
+                                heightPx,
+                                basePx
+                            )
+                        },
                     progress = explosion.progress
                 )
             }
@@ -303,7 +354,8 @@ private fun toOffset(
     return androidx.compose.ui.unit.IntOffset((px - half).roundToInt(), (py - half).roundToInt())
 }
 
-private fun toDp(value: Float, basePx: Float, density: Density): Dp = with(density) { (value * basePx).toDp() }
+private fun toDp(value: Float, basePx: Float, density: Density): Dp =
+    with(density) { (value * basePx).toDp() }
 
 @Composable
 private fun StarLayer(stars: List<Star>) {
@@ -374,6 +426,7 @@ private fun ExplosionEffect(modifier: Modifier, progress: Float) {
         contentScale = androidx.compose.ui.layout.ContentScale.Fit
     )
 }
+
 // ----------------------- Scoreboard -----------------------
 @Composable
 private fun Scoreboard(
@@ -386,21 +439,37 @@ private fun Scoreboard(
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         // ----------------------- Верхній ряд: Пауза + Очки -----------------------
+
         Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 8.dp, vertical = 4.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            SecondaryIconButton(onClick = onPause) {
-                Icon(
-                    imageVector = Icons.Filled.Pause,
-                    contentDescription = "Pause",
-                    tint = Color.White,
-                    modifier = Modifier.fillMaxSize(0.85f)
-                )
+            Box(
+                modifier = Modifier.wrapContentSize()
+            ) {
+                SecondaryIconButton(onClick = onPause) {
+                    Icon(
+                        imageVector = Icons.Filled.Pause,
+                        contentDescription = "Pause",
+                        tint = Color.White,
+                        modifier = Modifier.fillMaxSize(0.85f)
+                    )
+                }
             }
-            ScoreBadge(points = state.score, widthScale = 1.4f)
+
+            Spacer(modifier = Modifier.weight(1f))
+
+            Box(
+                modifier = Modifier
+                    .padding(start = 20.dp)
+                    .wrapContentSize()
+            ) {
+                ScoreBadge(state.score)
+            }
         }
+
 
         // ----------------------- ПРАВА панель: життя, енергія, чіпи -----------------------
         Row(
@@ -445,8 +514,8 @@ private fun RightStatsPanel(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Spacer(Modifier.weight(1f))
-            StatChip(title = "Time",    value = formatTime(state.timeSeconds))
-            StatChip(title = "Eggs",    value = state.bonusEggs.toString())
+            StatChip(title = "Time", value = formatTime(state.timeSeconds))
+            StatChip(title = "Eggs", value = state.bonusEggs.toString())
             StatChip(title = "Enemies", value = state.enemiesDown.toString())
         }
     }

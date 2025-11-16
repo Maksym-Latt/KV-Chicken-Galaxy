@@ -15,7 +15,7 @@ class MainViewModel @Inject constructor(
 ) : ViewModel() {
 
     enum class Screen { Menu, Game }
-    enum class MenuOverlay { None, Leaderboard, Settings, Skins, Privacy }
+    enum class MenuOverlay { None, Leaderboard, Settings, Skins}
 
     data class UiState(
         val screen: Screen = Screen.Menu,
@@ -45,7 +45,6 @@ class MainViewModel @Inject constructor(
         copy(screen = Screen.Menu, menuOverlay = MenuOverlay.Skins)
     }
 
-    fun openPrivacy() { updateIfMenu { copy(menuOverlay = MenuOverlay.Privacy) } }
     fun openLeaderboard() = updateIfMenu { copy(menuOverlay = MenuOverlay.Leaderboard) }
     fun openSettings() = updateIfMenu { copy(menuOverlay = MenuOverlay.Settings) }
     fun openSkins() = updateIfMenu { copy(menuOverlay = MenuOverlay.Skins) }

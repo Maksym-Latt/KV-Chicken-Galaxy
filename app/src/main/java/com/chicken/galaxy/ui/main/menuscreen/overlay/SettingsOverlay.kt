@@ -26,7 +26,6 @@ import com.chicken.galaxy.ui.main.settings.SettingsViewModel
 @Composable
 fun SettingsOverlay(
     onClose: () -> Unit,
-    onPrivacy: () -> Unit = {},
     viewModel: SettingsViewModel = hiltViewModel()
 ) {
     val ui by viewModel.ui.collectAsStateWithLifecycle()
@@ -83,17 +82,6 @@ fun SettingsOverlay(
                     onChange = viewModel::setSoundVolume,
                     modifier = Modifier.fillMaxWidth()
                 )
-
-                Row(
-                    modifier = Modifier.fillMaxWidth().padding(top = 30.dp),
-                    horizontalArrangement = Arrangement.SpaceEvenly
-                ) {
-                    OrangePrimaryButton(
-                        text = "Privacy",
-                        onClick = onPrivacy,
-                        modifier = Modifier.fillMaxWidth(0.85f)
-                    )
-                }
             }
         }
     }

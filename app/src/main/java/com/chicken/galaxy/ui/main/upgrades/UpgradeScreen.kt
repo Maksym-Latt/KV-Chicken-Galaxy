@@ -12,13 +12,20 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.displayCutout
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Tune
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -47,6 +54,7 @@ import com.chicken.galaxy.ui.main.component.GradientOutlinedTextShort
 import com.chicken.galaxy.ui.main.component.GradientOutlinedTextShort2
 import com.chicken.galaxy.ui.main.component.ScoreBadge
 import com.chicken.galaxy.ui.main.component.SecondaryBackButton
+import com.chicken.galaxy.ui.main.component.SecondaryIconButton
 import com.chicken.galaxy.ui.main.component.StartPrimaryButton
 import com.chicken.galaxy.ui.main.component.formatScoreFixed
 import com.chicken.galaxy.ui.main.menuscreen.PlayerViewModel
@@ -91,8 +99,8 @@ fun UpgradeScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .statusBarsPadding()
-                .padding(horizontal = 20.dp, vertical = 24.dp),
+                .windowInsetsPadding(WindowInsets.displayCutout)
+                .padding(horizontal = 20.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             TopBar(onBack = onBack, points = state.points)
@@ -173,14 +181,26 @@ private fun HangarShipArt() {
 @Composable
 private fun TopBar(onBack: () -> Unit, points: Int) {
     Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 8.dp, vertical = 4.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        SecondaryBackButton(onClick = onBack)
+        Box(
+            modifier = Modifier.wrapContentSize()
+        ) {
+            SecondaryBackButton(onClick = onBack)
+        }
 
-        ScoreBadge(points = points)
+        Spacer(modifier = Modifier.weight(1f))
+
+        Box(
+            modifier = Modifier.padding(start = 20.dp).wrapContentSize()
+        ) {
+            ScoreBadge(points)
+        }
     }
+
 }
 
 // ----------------------- Картка апгрейду (оновлена) -----------------------

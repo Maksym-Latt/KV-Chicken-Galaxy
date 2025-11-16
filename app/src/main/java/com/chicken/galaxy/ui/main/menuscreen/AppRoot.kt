@@ -17,7 +17,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.chicken.galaxy.ui.main.gamescreen.GameScreen
 import com.chicken.galaxy.ui.main.menuscreen.overlay.LeaderboardOverlay
 import com.chicken.galaxy.ui.main.menuscreen.overlay.LeaderboardRow
-import com.chicken.galaxy.ui.main.menuscreen.overlay.PrivacyOverlay
 import com.chicken.galaxy.ui.main.menuscreen.overlay.SettingsOverlay
 import com.chicken.galaxy.ui.main.upgrades.UpgradeScreen
 
@@ -72,14 +71,10 @@ fun AppRoot(
                 MainViewModel.MenuOverlay.Settings ->
                     SettingsOverlay(
                         onClose = vm::closeOverlay,
-                        onPrivacy = vm::openPrivacy
                     )
 
                 MainViewModel.MenuOverlay.Skins ->
                     UpgradeScreen(onBack = vm::closeOverlay)
-
-                MainViewModel.MenuOverlay.Privacy ->
-                    PrivacyOverlay(onClose = vm::closeOverlay)
 
                 MainViewModel.MenuOverlay.None -> Unit
             }
